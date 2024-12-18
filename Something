@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Progress Tracker</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        /* Input and Button Styles */
+        input[type="text"], input[type="number"] {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button {
+            padding: 10px 15px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .add-row-btn {
+            margin-bottom: 20px;
+            display: block;
+        }
+        .saved-data {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Progress Tracker</h1>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Number of Chapters Completed</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+        <button class="button add-row-btn" onclick="addRow()">Add Student</button>
+        <button class="button" onclick="saveData()">Save Progress</button>
+
+        <div class="saved-data">
+            <h2>Saved Student Progress</h2>
+            <table id="savedDataTable">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Number of Chapters Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Saved data will appear here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const studentTable = document.getElementById('studentTable').querySelector('tbody');
+        const savedDataTable = document.getElementById('savedDataTable').querySelector('tbody');
+
+        // Function to add a new row
+        function addRow() {
+            const tr = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            const chaptersCell = document.createElement('td');
+            const actionCell = document.createElement('td');
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.placeholder = 'Enter student name';
+
+            const chaptersInput = document.createElement('input');
+            chaptersInput.type = 'number';
+            chaptersInput.min = 0;
+            chaptersInput.placeholder = 'Enter number of chapters';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'button delete-btn';
+            deleteButton.onclick = function () {
+                studentTable.removeChild(tr);
+            };
+
+            nameCell.appendChild(nameInput);
+            chaptersCell.appendChild(chaptersInput);
+            actionCell.appendChild(deleteButton);
+
+            tr.appendChild(nameCell);
+            tr.appendChild(chaptersCell);
+            tr.appendChild(actionCell);
+
+            studentTable.appendChild(tr);
+        }
+
+        // Function to save progress
+        function saveData() {
+            // Clear the saved data table
+            savedDataTable.innerHTML = '';
+
+            const rows = studentTable.querySelectorAll('tr');
+            rows.forEach(row => {
+                const name = row.cells[0].querySelector('input').value || 'N/A';
+                const chapters = row.cells[1].querySelector('input').value || 0;
+
+                // Add the data to the saved data table
+                const savedRow = document.createElement('tr');
+                const savedNameCell = document.createElement('td');
+                const savedChaptersCell = document.createElement('td');
+
+                savedNameCell.textContent = name;
+                savedChaptersCell.textContent = chapters;
+
+                savedRow.appendChild(savedNameCell);
+                savedRow.appendChild(savedChaptersCell);
+                savedDataTable.appendChild(savedRow);
+            });
+
+            alert('Progress saved successfully! The table below has been updated.');
+        }
+    </script>
+</body>
+</html>
